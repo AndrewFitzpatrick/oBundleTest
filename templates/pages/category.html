@@ -6,6 +6,7 @@ category:
 ---
 {{inject "categoryProductsPerPage" theme_settings.categorypage_products_per_page}}
 {{inject "categoryId" category.id}}
+{{inject "productIds" (pluck category.products 'id')}}
 {{#partial "head"}}
     {{#if pagination.category.previous}}
         <link rel="prev" href="{{pagination.category.previous}}">
@@ -49,6 +50,14 @@ category:
     {{/if}}
 
     <div class="page-content" id="product-listing-container">
+        <!-- {{category.product.id}} -->
+        <div>
+            <a 
+            {{!-- href="{{add_to_cart_url}}"  --}}
+            href="/cart.php?action=add&product_id=112" 
+            data-event-type="product-click" data-button-type="add-cart" class="button button--small card-figcaption-button" id="add-to-cart-category-button">{{lang 'products.add_all_to_cart'}}</a>
+            <span class="product-status-message aria-description--hidden">{{lang 'category.add_cart_announcement'}}</span>
+        </div>
         {{> components/category/product-listing}}
         {{{region name="category_below_content"}}}
     </div>
