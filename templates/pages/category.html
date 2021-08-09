@@ -50,12 +50,11 @@ category:
     {{/if}}
 
     <div class="page-content" id="product-listing-container">
-        <!-- {{category.product.id}} -->
         <div>
             <a 
             {{!-- href="{{add_to_cart_url}}"  --}}
-            href="/cart.php?action=add&product_id=112" 
-            data-event-type="product-click" data-button-type="add-cart" class="button button--small card-figcaption-button" id="add-to-cart-category-button">{{lang 'products.add_all_to_cart'}}</a>
+            data-event-type="product-click" data-button-type="add-cart" class="button button--small card-figcaption-button" id="add-to-cart-category-button">{{lang 'products.add_all_to_cart'}}
+            </a>
             <span class="product-status-message aria-description--hidden">{{lang 'category.add_cart_announcement'}}</span>
         </div>
         {{> components/category/product-listing}}

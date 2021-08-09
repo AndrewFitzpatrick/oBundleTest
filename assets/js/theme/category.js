@@ -7,9 +7,7 @@ import { createTranslationDictionary } from '../theme/common/utils/translations-
 export default class Category extends CatalogPage {
     constructor(context) {
         super(context);
-        // console.log(context.productIds);
         this.validationDictionary = createTranslationDictionary(context);
-        let categoryProductIds = context.productIds;
     }
 
     setLiveRegionAttributes($element, roleType, ariaLiveStatus) {
@@ -48,30 +46,26 @@ export default class Category extends CatalogPage {
         $('a.reset-btn').on('click', () => this.setLiveRegionsAttributes($('span.reset-message'), 'status', 'polite'));
 
         this.ariaNotifyNoProducts();
-        let cartUrl = '/cart.php';
-        //bind this to our event    
+        this.addAllToCart();
+    }
+
+    addAllToCart() {
+        let cartUrl = '/';
         const addToCart = () => {
-            console.log('click');
+            console.log(this.context);
+            let categoryProductIds = this.context.productIds;
             
             if (categoryProductIds.length) {
                 for (var i = 0; i < categoryProductIds.length; i++) {
                     $.ajax({
                         type: 'GET',
                         async: false,
-                        url: cartUrl+'?action=add&amp;product_id='+categoryProductIds[i]+'&amp;fastcart=1&amp;ajaxsubmit=1',
                         success: (data) => {
-                            //parse bigcommerce html reponse
-                            var obj = JSON.parse($(data).html());
-                            //success property = true if item was added successfully
-                            if (obj.success) {
-                            } else {
-                                //do something to show items were not successfully added to cart
-                            }
+                            window.location='../cart.php?action=add&product_id='+categoryProductIds[i];
                         }
                     });
                 }
-            }
-        window.location.replace(cartUrl);
+            }        
         }; 
 
         $('#add-to-cart-category-button').click(addToCart);
