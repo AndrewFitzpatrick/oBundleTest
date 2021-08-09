@@ -57,13 +57,7 @@ export default class Category extends CatalogPage {
             
             if (categoryProductIds.length) {
                 for (var i = 0; i < categoryProductIds.length; i++) {
-                    $.ajax({
-                        type: 'GET',
-                        async: false,
-                        success: (data) => {
-                            window.location='../cart.php?action=add&product_id='+categoryProductIds[i];
-                        }
-                    });
+                    window.location='../cart.php?action=add&product_id='+categoryProductIds[i];
                 }
             }        
         }; 
