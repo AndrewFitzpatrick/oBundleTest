@@ -3,6 +3,7 @@ import CatalogPage from './catalog';
 import compareProducts from './global/compare-products';
 import FacetedSearch from './common/faceted-search';
 import { createTranslationDictionary } from '../theme/common/utils/translations-utils';
+import utils from '@bigcommerce/stencil-utils'
 
 export default class Category extends CatalogPage {
     constructor(context) {
@@ -44,9 +45,61 @@ export default class Category extends CatalogPage {
         }
 
         $('a.reset-btn').on('click', () => this.setLiveRegionsAttributes($('span.reset-message'), 'status', 'polite'));
-
         this.ariaNotifyNoProducts();
+
+        this.addRemoveCart();
     }
+
+    addRemoveCart() {
+        utils.api.cart.getCartQuantity({}, (err, response) => {
+            if (response > 0) {
+
+                console.log('remove');
+                $('#add-to-cart-category-button').hide();
+                $('#remove-from-cart-category-button').show();
+                $('#remove-from-cart-category-button').on('click', () => this.cartRemoveItem(112, (err, response))); 
+
+            } else { 
+
+                console.log('add');
+                this.addAllToCart();
+                
+            }
+        }); 
+    }
+
+    addAllToCart() {
+        let cartUrl = '/';
+        $('#remove-from-cart-category-button').hide();
+        $('#add-to-cart-category-button').show();
+        const addToCart = () => {
+            console.log('click');
+            let categoryProductIds = this.context.productIds;
+            
+            if (categoryProductIds.length) {
+                for (var i = 0; i < categoryProductIds.length; i++) {
+                    window.location='../cart.php?action=add&product_id='+categoryProductIds[i];
+                }
+            }        
+        }; 
+        $('#add-to-cart-category-button').click(addToCart);
+    }
+
+    cartRemoveItem(itemId, errResponse) {
+        console.log(errResponse[1].data.status);
+
+        
+        $('#remove-from-cart-category-button').on('click', () => {
+            utils.api.cart.itemRemove(itemId, errResponse => {
+                if (errResponse[1].data.status === 'succeed') {
+                    this.refreshContent(true);
+                } else {
+                    alert(errResponse[1].data.errors.join('\n'));
+                }
+            });
+        });
+    }
+    
 
     ariaNotifyNoProducts() {
         const $noProductsMessage = $('[data-no-products-notification]');
