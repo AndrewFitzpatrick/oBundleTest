@@ -743,6 +743,7 @@
         },
         "add_to_cart": "Add to Cart",
         "add_all_to_cart": "Add ALL to Cart",
+        "remove_all_to_cart": "Remove ALL from Cart",
         "adding_to_cart": "Adding to cart…",
         "options": "Options",
         "none": "None",
