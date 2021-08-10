@@ -51,15 +51,17 @@ category:
 
     <div class="page-content" id="product-listing-container">
         <div>
+           {{!--  {{#filter product.category 'special-items'}} --}}
             <a 
             {{!-- href="{{add_to_cart_url}}"  --}}
             data-event-type="product-click" data-button-type="add-cart" class="button button--primary" id="add-to-cart-category-button">{{lang 'products.add_all_to_cart'}}
             </a>
             <a 
             {{!-- href="{{add_to_cart_url}}"  --}}
-            data-event-type="product-click" data-button-type="add-cart" class="button button--primary" id="remove-from-cart-category-button">{{lang 'products.remove_all_to_cart'}}
+            data-event-type="product-click" data-button-type="remove-cart" class="button button--primary" id="remove-from-cart-category-button">{{lang 'products.remove_all_to_cart'}}
             </a>
             <span class="product-status-message aria-description--hidden">{{lang 'category.add_cart_announcement'}}</span>
+           {{!--  {{/filter}} --}}
         </div>
         {{> components/category/product-listing}}
         {{{region name="category_below_content"}}}

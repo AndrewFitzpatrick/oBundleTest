@@ -45,85 +45,50 @@ export default class Category extends CatalogPage {
         }
 
         $('a.reset-btn').on('click', () => this.setLiveRegionsAttributes($('span.reset-message'), 'status', 'polite'));
-
         this.ariaNotifyNoProducts();
-        // console.log('Log Cart');
-        // fetch('/api/storefront/cart', {
-        //   credentials: 'include'
-        // }).then(function(response) {
-        //   return response.json();
-        // }).then(function(myJson) {
-        //   console.log(myJson);
-        // });
+
         this.addRemoveCart();
-        // this.addAllToCart();
-        // $('#remove-from-cart-category-button').on('click', () => {
-        //     console.log('click');
-        //     utils.api.cart.getCartQuantity({}, (err, response) => {
-        //         // console.log(response > 0);
-        //         if (response > 0) { 
-        //             this.addAllToCart() 
-        //         } else { 
-        //             this.cartRemoveItem(112, (err, response)); 
-        //         }
-        //     }); 
-        // })
     }
+
     addRemoveCart() {
         utils.api.cart.getCartQuantity({}, (err, response) => {
-            // console.log(response > 0);
-            if (response > 0) { 
-                this.cartRemoveItem(112, (err, response));
+            if (response > 0) {
+
+                console.log('remove');
+                $('#add-to-cart-category-button').hide();
+                $('#remove-from-cart-category-button').show();
+                $('#remove-from-cart-category-button').on('click', () => this.cartRemoveItem(112, (err, response))); 
+
             } else { 
+
+                console.log('add');
                 this.addAllToCart();
+                
             }
         }); 
     }
 
     addAllToCart() {
-        function createCart(url, cartItems) {
-           return fetch(url, {
-               method: "POST",
-               credentials: "same-origin",
-               headers: {
-                   "Content-Type": "application/json"},
-               body: JSON.stringify(cartItems),
-           })
-           .then(response => response.json());
-         };
-
-        $('#add-to-cart-category-button').click(
-            createCart(`https://fitztastic.mybigcommerce.com/api/storefront/carts`, {
-               "lineItems": [
-                   {
-                       "quantity": 1,
-                       "productId": 112
-                   },
-                ]}
-            )
-            .then(data => console.log(JSON.stringify(data)))
-            .catch(error => console.error(error))
-        );
-        // let cartUrl = '/';
-        // // $('#remove-from-cart-category-button').hide();
-        // // $('#add-to-cart-category-button').show();
-        // const addToCart = () => {
-        //     console.log('click');
-        //     let categoryProductIds = this.context.productIds;
+        let cartUrl = '/';
+        $('#remove-from-cart-category-button').hide();
+        $('#add-to-cart-category-button').show();
+        const addToCart = () => {
+            console.log('click');
+            let categoryProductIds = this.context.productIds;
             
-        //     if (categoryProductIds.length) {
-        //         for (var i = 0; i < categoryProductIds.length; i++) {
-        //             window.location='../cart.php?action=add&product_id='+categoryProductIds[i];
-        //         }
-        //     }        
-        // }; 
-        // $('#add-to-cart-category-button').click(addToCart);
+            if (categoryProductIds.length) {
+                for (var i = 0; i < categoryProductIds.length; i++) {
+                    window.location='../cart.php?action=add&product_id='+categoryProductIds[i];
+                }
+            }        
+        }; 
+        $('#add-to-cart-category-button').click(addToCart);
     }
 
     cartRemoveItem(itemId, errResponse) {
         console.log(errResponse[1].data.status);
-        $('#remove-from-cart-category-button').show();
-        $('#add-to-cart-category-button').hide();
+
+        
         $('#remove-from-cart-category-button').on('click', () => {
             utils.api.cart.itemRemove(itemId, errResponse => {
                 if (errResponse[1].data.status === 'succeed') {
@@ -133,7 +98,6 @@ export default class Category extends CatalogPage {
                 }
             });
         });
-        // $('#remove-from-cart-category-button').click(cartRemoveItem);
     }
     
 
