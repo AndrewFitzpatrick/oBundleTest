@@ -32,7 +32,7 @@ export default class Category extends CatalogPage {
 
         //get cart and product id
         console.log('Log Cart');
-        fetch('/api/storefront/cart', {
+        fetch('../api/storefront/cart', {
           credentials: 'include'
         }).then(function(response) {
           return response.json();
@@ -58,44 +58,36 @@ export default class Category extends CatalogPage {
         $('a.reset-btn').on('click', () => this.setLiveRegionsAttributes($('span.reset-message'), 'status', 'polite'));
         this.ariaNotifyNoProducts();
         // console.log(myCart);
-        $('#add-to-cart-category-button').on('click', () => 
-            this.addCartItem(
-                `../api/storefront/carts/`, 
-                `bdec6d16-e546-4c24-afa2-b9c37e0c31f8`, 
-                { "lineItems": [ {"quantity": 1, "productId": 112 } ]}
-            )
-            .then(data => console.log(JSON.stringify(data)))
-            .catch(error => console.error(error)));
+
+
+        const getCartId = () => {
+            return fetch('../api/storefront/cart', {
+              credentials: 'include'
+            }).then(function(response) {
+              return response.json();
+            }).then(function(myJson) {
+                return myJson
+            });
+        }
+
+        $('#add-to-cart-category-button').on('click', () => {
+
+            getCartId().then(response => {
+                console.log(response[0].id); 
+                this.addCartItem(`../api/storefront/carts/`, response[0].id, { "lineItems": [ {"quantity": 1, "productId": 112 } ]})
+                .then(data => console.log(JSON.stringify(data)))
+                .catch(error => console.error(error));
+
+            })
+        });
+
         this.removeCart();
-
-        // this.createCart(`/api/storefront/carts`, {
-        //    "id": "d4e978c2-bdcf-41b0-a49b-fecf4f5223c1",
-        //    "lineItems": [
-        //        {
-        //            "quantity": 1,
-        //            "productId": 112
-        //        }
-        //     ]}
-        // )
-        // .then(data => console.log(JSON.stringify(data)))
-        // .catch(error => console.error(error));
-
     }
-
-    // createCart(url, cartItems) {
-    //    return fetch(url, {
-    //        method: "POST",
-    //        credentials: "same-origin",
-    //        headers: {
-    //            "Content-Type": "application/json"},
-    //        body: JSON.stringify(cartItems),
-    //    })
-    //    .then(response => response.json());
-    //  };
 
     removeCart() {
         
         utils.api.cart.getCartQuantity({}, (err, response) => {
+            console.log(response);
             if (response > 0) {
                 $('#remove-from-cart-category-button').show();
                 $('#remove-from-cart-category-button').on('click', () =>
@@ -110,6 +102,8 @@ export default class Category extends CatalogPage {
     }
 
     addCartItem(url, cartId, cartItems) {
+        console.log('click');
+        // console.log(url, cartId, cartItems);
         return fetch(url + cartId + '/items', {
             method: "POST",
             credentials: "same-origin",
@@ -119,23 +113,6 @@ export default class Category extends CatalogPage {
         })
         .then(response => response.json());
     };
-
-    // addAllToCart() {
-        // let cartUrl = '/';
-        // $('#add-to-cart-category-button').show();
-        // const addToCart = () => {
-        //     console.log('click');
-        //     let categoryProductIds = this.context.productIds;
-            
-        //     if (categoryProductIds.length) {
-        //         for (var i = 0; i < categoryProductIds.length; i++) {
-        //             window.location='../cart.php?action=add&product_id='+categoryProductIds[i];
-        //         }
-        //     }        
-        // }; 
-        // $('#add-to-cart-category-button').click(addToCart);
-        
-    // }
 
     deleteCartItem(url, cartId, itemId) {
        return fetch(url + cartId + '/items/' + itemId, {
