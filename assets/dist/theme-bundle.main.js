@@ -250,17 +250,17 @@ var pageClasses = {
   blog: noop,
   blog_post: noop,
   brand: function brand() {
-    return Promise.all(/*! import() */[__webpack_require__.e(1), __webpack_require__.e(2), __webpack_require__.e(10)]).then(__webpack_require__.bind(null, /*! ./theme/brand */ "./assets/js/theme/brand.js"));
+    return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(10)]).then(__webpack_require__.bind(null, /*! ./theme/brand */ "./assets/js/theme/brand.js"));
   },
   brands: noop,
   cart: function cart() {
     return Promise.all(/*! import() */[__webpack_require__.e(6), __webpack_require__.e(8)]).then(__webpack_require__.bind(null, /*! ./theme/cart */ "./assets/js/theme/cart.js"));
   },
   category: function category() {
-    return Promise.all(/*! import() */[__webpack_require__.e(1), __webpack_require__.e(2), __webpack_require__.e(16)]).then(__webpack_require__.bind(null, /*! ./theme/category */ "./assets/js/theme/category.js"));
+    return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1), __webpack_require__.e(11)]).then(__webpack_require__.bind(null, /*! ./theme/category */ "./assets/js/theme/category.js"));
   },
   compare: function compare() {
-    return __webpack_require__.e(/*! import() */ 11).then(__webpack_require__.bind(null, /*! ./theme/compare */ "./assets/js/theme/compare.js"));
+    return __webpack_require__.e(/*! import() */ 12).then(__webpack_require__.bind(null, /*! ./theme/compare */ "./assets/js/theme/compare.js"));
   },
   page_contact_form: function page_contact_form() {
     return __webpack_require__.e(/*! import() */ 13).then(__webpack_require__.bind(null, /*! ./theme/contact-us */ "./assets/js/theme/contact-us.js"));
@@ -268,13 +268,13 @@ var pageClasses = {
   error: noop,
   404: noop,
   giftcertificates: function giftcertificates() {
-    return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./theme/gift-certificate */ "./assets/js/theme/gift-certificate.js"));
+    return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ./theme/gift-certificate */ "./assets/js/theme/gift-certificate.js"));
   },
   giftcertificates_balance: function giftcertificates_balance() {
-    return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./theme/gift-certificate */ "./assets/js/theme/gift-certificate.js"));
+    return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ./theme/gift-certificate */ "./assets/js/theme/gift-certificate.js"));
   },
   giftcertificates_redeem: function giftcertificates_redeem() {
-    return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./theme/gift-certificate */ "./assets/js/theme/gift-certificate.js"));
+    return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ./theme/gift-certificate */ "./assets/js/theme/gift-certificate.js"));
   },
   "default": noop,
   page: noop,
@@ -285,7 +285,7 @@ var pageClasses = {
     return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ./theme/product */ "./assets/js/theme/product.js"));
   },
   search: function search() {
-    return Promise.all(/*! import() */[__webpack_require__.e(1), __webpack_require__.e(15), __webpack_require__.e(2), __webpack_require__.e(14)]).then(__webpack_require__.bind(null, /*! ./theme/search */ "./assets/js/theme/search.js"));
+    return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(15), __webpack_require__.e(1), __webpack_require__.e(14)]).then(__webpack_require__.bind(null, /*! ./theme/search */ "./assets/js/theme/search.js"));
   },
   rss: noop,
   sitemap: noop,
