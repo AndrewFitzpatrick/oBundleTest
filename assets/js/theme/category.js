@@ -30,16 +30,6 @@ export default class Category extends CatalogPage {
 
     onReady() {
 
-        //get cart and product id
-        console.log('Log Cart');
-        fetch('/api/storefront/cart', {
-          credentials: 'include'
-        }).then(function(response) {
-          return response.json();
-        }).then(function(myJson) {
-          console.log(myJson);
-        });
-
         this.arrangeFocusOnSortBy();
 
         $('[data-button-type="add-cart"]').on('click', (e) => this.setLiveRegionAttributes($(e.currentTarget).next(), 'status', 'polite'));
@@ -57,60 +47,64 @@ export default class Category extends CatalogPage {
 
         $('a.reset-btn').on('click', () => this.setLiveRegionsAttributes($('span.reset-message'), 'status', 'polite'));
         this.ariaNotifyNoProducts();
-        // console.log(myCart);
-        $('#add-to-cart-category-button').on('click', () => 
-            this.addCartItem(
-                `../api/storefront/carts/`, 
-                `bdec6d16-e546-4c24-afa2-b9c37e0c31f8`, 
-                { "lineItems": [ {"quantity": 1, "productId": 112 } ]}
-            )
-            .then(data => console.log(JSON.stringify(data)))
-            .catch(error => console.error(error)));
-        this.removeCart();
 
-        // this.createCart(`/api/storefront/carts`, {
-        //    "id": "d4e978c2-bdcf-41b0-a49b-fecf4f5223c1",
-        //    "lineItems": [
-        //        {
-        //            "quantity": 1,
-        //            "productId": 112
-        //        }
-        //     ]}
-        // )
-        // .then(data => console.log(JSON.stringify(data)))
-        // .catch(error => console.error(error));
+        const getCartId = () => {
+            return fetch('../api/storefront/cart', {
+              credentials: 'include'
+            }).then(function(response) {
+              return response.json();
+            }).then(function(myJson) {
+                return myJson
+            });
+        }
 
-    }
+        $('#item-added-banner').hide();
+        $('#item-removed-banner').hide();
+        $('#add-to-cart-category-button').on('click', () => {
+            utils.api.cart.getCartQuantity({}, (err, response) => {
+                if (response > 0) {
+                    getCartId().then(item => {
+                        const url = `../api/storefront/carts/` + item[0].id;
+                        this.addCartItem(url, { "lineItems": [
+                           {
+                               "quantity": 1,
+                               "productId": 112
+                           }
+                        ] })
+                    })
+                } else {
+                    getCartId().then(item => {
+                        this.addCartItem(`../api/storefront/carts`, {"lineItems": [ { "quantity": 1, "productId": 112 } ]})
+                    })
+                }
+            })
+        });
 
-    // createCart(url, cartItems) {
-    //    return fetch(url, {
-    //        method: "POST",
-    //        credentials: "same-origin",
-    //        headers: {
-    //            "Content-Type": "application/json"},
-    //        body: JSON.stringify(cartItems),
-    //    })
-    //    .then(response => response.json());
-    //  };
+        $('#remove-from-cart-category-button').on('click', () => {
+            getCartId().then(item => {
+                console.log(item[0]); 
+                const url = `../api/storefront/carts/` + item[0].id;
+                this.deleteCartItem(url, item[0].lineItems.physicalItems[0].id)
+            })
+                
+        });
 
-    removeCart() {
-        
         utils.api.cart.getCartQuantity({}, (err, response) => {
+            console.log(response);
             if (response > 0) {
                 $('#remove-from-cart-category-button').show();
-                $('#remove-from-cart-category-button').on('click', () =>
-                        this.deleteCartItem(`../api/storefront/carts/`, `bdec6d16-e546-4c24-afa2-b9c37e0c31f8`, `425c6146-c8fe-4c18-a76a-f4e5a84d610b`)
-                        .then(data => console.log(JSON.stringify(data)))
-                        .catch(error => console.log(error))
-                )
-            } else { 
+            } else {
                 $('#remove-from-cart-category-button').hide();
             }
-        }); 
+        });
+
     }
 
-    addCartItem(url, cartId, cartItems) {
-        return fetch(url + cartId + '/items', {
+    addCartItem(url, cartItems) {
+        $('#item-added-banner').show();
+        $('#remove-from-cart-category-button').show();
+        $('#add-banner-button').click(() => $('#item-added-banner').hide());
+        return fetch(url + '/items', {
             method: "POST",
             credentials: "same-origin",
             headers: {
@@ -118,27 +112,15 @@ export default class Category extends CatalogPage {
             body: JSON.stringify(cartItems),
         })
         .then(response => response.json());
+
+
     };
 
-    // addAllToCart() {
-        // let cartUrl = '/';
-        // $('#add-to-cart-category-button').show();
-        // const addToCart = () => {
-        //     console.log('click');
-        //     let categoryProductIds = this.context.productIds;
-            
-        //     if (categoryProductIds.length) {
-        //         for (var i = 0; i < categoryProductIds.length; i++) {
-        //             window.location='../cart.php?action=add&product_id='+categoryProductIds[i];
-        //         }
-        //     }        
-        // }; 
-        // $('#add-to-cart-category-button').click(addToCart);
-        
-    // }
-
-    deleteCartItem(url, cartId, itemId) {
-       return fetch(url + cartId + '/items/' + itemId, {
+    deleteCartItem(url, itemId) {
+        $('#item-removed-banner').show();
+        $('#remove-banner-button').click(() => $('#item-removed-banner').hide());
+        // console.log(url + '/items/' + itemId);
+       return fetch(url + '/items/' + itemId, {
            method: "DELETE",
            credentials: "same-origin",
            headers: {

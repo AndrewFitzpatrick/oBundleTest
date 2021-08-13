@@ -436,3 +436,30 @@
         width: auto;
     }
 }
+
+#item-added-banner {
+    background-color: #FFF8E3;
+}
+#item-removed-banner {
+    background-color: #FFE7E7;
+}
+    
+.category-banner {
+    width: 100%;
+    padding: 15px;
+    
+    button {
+        float: right;
+        padding: 5px 10px;
+        background-color: #FFFFFF;
+        border-radius: 10px;
+        position: relative;
+        top: -5px;
+    }
+    button:hover {
+        background-color: #444444;
+        color: #ffffff;
+    }
+    
+}
+
