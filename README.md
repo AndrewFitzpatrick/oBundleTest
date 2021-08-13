@@ -1,146 +1,33 @@
-# Cornerstone
-![tests](https://github.com/bigcommerce/cornerstone/workflows/Theme%20Bundling%20Test/badge.svg?branch=master)
+#Task
+----------
+**DONE -** Create a product called Special Item which will be assigned to a new category called Special Items. Be sure to add at least 2 images during the product creation
+• Created product and category in Bigcommerce dashboard
 
-Stencil's Cornerstone theme is the building block for BigCommerce theme developers to get started quickly developing premium quality themes on the BigCommerce platform.
+**DONE -** The Special Item should be the only item which shows in this category - create a feature that will show the product's second image when it is hovered on.
+• created in templates/products/options/card.html
+	In card-img-container created a second-img class with {{#each (limit images 2)}}
+• in /assets/scss/components/citadel/cards/_cards.scss:
+	created a pseudo :hover to show .second-img
 
-### Stencil Utils
-[Stencil-utils](https://github.com/bigcommerce/stencil-utils) is our supporting library for our events and remote interactions.
+**PARTIAL DONE** - Add a button at the top of the category page labeled Add All To Cart. When clicked, the product will be added to the cart. Notify the user that the product has been added.
+• in assets/js/category.js
+	addCartItem() functionality added on #add-to-cart-category-button click
+	#item-added-banner shown on click
+	#item-added-banner hidden on button X click
 
-## JS API
-When writing theme JavaScript (JS) there is an API in place for running JS on a per page basis. To properly write JS for your theme, the following page types are available to you:
+I am able to add a product with this button IF there is already an item in the cart. Looking at the available docs [here: https://developer.bigcommerce.com/api-docs/storefront/tutorials/carts](https://developer.bigcommerce.com/api-docs/storefront/tutorials/carts) - I am unable to create a cart with createCart() according to the docs. It looks like the difference between addCartItem() and createCart() is the cartId, which I am able to pull from the API for an existing cart. The add all to cart button will work if there is already an item in the cart but it is specifically adding item 112. It seems like there should be a way to pull this item from the existing special items category but I am not familiar with Bigcommerce and need to see a working example. I feel like the fetch for the API may be in the wrong place.
 
-* "pages/account/addresses"
-* "pages/account/add-address"
-* "pages/account/add-return"
-* "pages/account/add-wishlist"
-* "pages/account/recent-items"
-* "pages/account/download-item"
-* "pages/account/edit"
-* "pages/account/return-saved"
-* "pages/account/returns"
-* "pages/account/payment-methods"
-* "pages/auth/login"
-* "pages/auth/account-created"
-* "pages/auth/create-account"
-* "pages/auth/new-password"
-* "pages/blog"
-* "pages/blog-post"
-* "pages/brand"
-* "pages/brands"
-* "pages/cart"
-* "pages/category"
-* "pages/compare"
-* "pages/errors"
-* "pages/gift-certificate/purchase"
-* "pages/gift-certificate/balance"
-* "pages/gift-certificate/redeem"
-* "global"
-* "pages/home"
-* "pages/order-complete"
-* "pages/page"
-* "pages/product"
-* "pages/search"
-* "pages/sitemap"
-* "pages/subscribed"
-* "pages/account/wishlist-details"
-* "pages/account/wishlists"
-
-These page types will correspond to the pages within your theme. Each one of these page types map to an ES6 module that extends the base `PageManager` abstract class.
-
-```javascript
-    export default class Auth extends PageManager {
-        constructor() {
-            // Set up code goes here; attach to internals and use internals as you would 'this'
-        }
-    }
-```
-
-### JS Template Context Injection
-Occasionally you may need to use dynamic data from the template context within your client-side theme application code.
-
-Two helpers are provided to help achieve this.
-
-The inject helper allows you to compose a JSON object with a subset of the template context to be sent to the browser.
-
-```
-{{inject "stringBasedKey" contextValue}}
-```
-
-To retrieve the parsable JSON object, just call `{{jsContext}}` after all of the `{{@inject}}` calls.
-
-For example, to setup the product name in your client-side app, you can do the following if you're in the context of a product:
-
-```html
-{{inject "myProductName" product.title}}
-
-<script>
-// Note the lack of quotes around the jsContext handlebars helper, it becomes a string automatically.
-var jsContext = JSON.parse({{jsContext}}); // jsContext would output "{\"myProductName\": \"Sample Product\"}" which can feed directly into your JavaScript
-
-console.log(jsContext.myProductName); // Will output: Sample Product
-</script>
-```
-
-You can compose your JSON object across multiple pages to create a different set of client-side data depending on the currently loaded template context.
-
-The stencil theme makes the jsContext available on both the active page scoped and global PageManager objects as `this.context`.
-
-## Polyfilling via Feature Detection
-Cornerstone implements [this strategy](https://philipwalton.com/articles/loading-polyfills-only-when-needed/) for polyfilling.
-
-In `templates/components/common/polyfill-script.html` there is a simple feature detection script which can be extended to detect any recent JS features you intend to use in your theme code.
-
-If any one of the conditions is not met, an additional blocking JS bundle configured in `assets/js/polyfills.js` will be loaded to polyfill modern JS features before the main bundle executes. 
-
-This intentionally prioritizes the experience of the 90%+ of shoppers who are on modern browsers in terms of performance, while maintaining compatibility (at the expense of additional JS download+parse for the polyfills) for users on legacy browsers.
-
-## Static assets
-Some static assets in the Stencil theme are handled with Grunt if required. This
-means you have some dependencies on grunt and npm. To get started:
-
-First make sure you have Grunt installed globally on your machine:
-
-```
-npm install -g grunt-cli
-```
-
-and run:
-
-```
-npm install
-```
-
-Note: package-lock.json file was generated by Node version 10 and npm version 6.11.3. The app supports Node 10 as well as multiple versions of npm, but we should always use those versions when updating package-lock.json, unless it is decided to upgrade those, and in this case the readme should be updated as well. If using a different version for node OR npm, please delete the package-lock.json file prior to installing node packages and also prior to pushing to github.
-
-If updating or adding a dependency, please double check that you are working on Node version 10 and npm version 6.11.3 and run ```npm update <package_name>```  or ```npm install <package_name>``` (avoid running npm install for updating a package). After updating the package, please make sure that the changes in the package-lock.json reflect only the updated/new package prior to pushing the changes to github.
+**DONE -** If the cart has an item in it - show a button next to the Add All To Cart button which says Remove All Items. When clicked it should clear the cart and notify the user.
+Both buttons should utilize the Storefront API for completion.
+• in assets/js/category.js
+	added deleteCartItem() functionality
+	If there is an item in the cart Remove all from cart button is shown, when clicked items are removed from cart.
 
 
-### Icons
-Icons are delivered via a single SVG sprite, which is embedded on the page in
-`templates/layout/base.html`. It is generated via a grunt task `grunt svgstore`.
+#Submission
+--------------------
+Create a GitHub repo for your codebase . In the Readme file remove the current data and add your own which describes a brief overview of your test.
+[GitHub repo: https://github.com/AndrewFitzpatrick/oBundleTest](https://github.com/AndrewFitzpatrick/oBundleTest)
 
-The task takes individual SVG files for each icon in `assets/icons` and bundles
-them together, to be inlined on the top of the theme, via an ajax call managed
-by svg-injector. Each icon can then be called in a similar way to an inline image via:
-
-```
-<svg><use xlink:href="#icon-svgFileName" /></svg>
-```
-
-The ID of the SVG icon you are calling is based on the filename of the icon you want,
-with `icon-` prepended. e.g. `xlink:href="#icon-facebook"`.
-
-Simply add your new icon SVG file to the icons folder, and run `grunt svgstore`,
-or just `grunt`.
-
-#### License
-
-(The MIT License)
-Copyright (C) 2015-present BigCommerce Inc.
-All rights reserved.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Be sure you include the Preview Code for the Bigcommerce Store, along with its URL, so we can view it. Then reply to this email with the Github repo link.
+[Preview URL: https://fitztastic.mybigcommerce.com/](https://fitztastic.mybigcommerce.com/)
